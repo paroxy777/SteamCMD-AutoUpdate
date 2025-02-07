@@ -5,7 +5,7 @@
   <p>This project is to a simple way to upgrade any dedicatied game server that was installed via Steam or SteamCMD. SteamCMD will verify your local installtion files and install any recent updates.
   <p>This is all highly experimental. There are no destructive functions, but use at your own risk.</p>
   
-  <h2>Theroy of operation</h2>
+  <h2>Theory of operation</h2>
   <ol>
     <li>Stop the running server gracefully</li>
     <li>Verify the server process has quit</li>
