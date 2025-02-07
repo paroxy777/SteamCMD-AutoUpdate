@@ -40,7 +40,7 @@
     <li>Edit the User Configuration area at the top of the .cmd file.</li>
     <li>Run as Administrator. This is required for the Windows Service stop/start controls.</li>
   </ol>
-  <h3>.AU3 or .EXE Version:</h3>
+  <h3>AU3 or .EXE Version:</h3>
   <ol>
     <li>Edit the .INI to match your server's configuration.</li>
     <li>Run as Administrator. This is required for the Windows Service stop/start controls.</li>
