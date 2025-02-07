@@ -49,6 +49,7 @@
   <p>1. Make multiple copies the SteamCMD-AutoUpdate.cmd and modify the User Configuration section in each file.</p>
   <p>2. Run the .CMD file for the dedicated server you wish.</p>
   <h3>AU3 or EXE version:</h3>
+  <p>Plan A:</p>
   <p>1. Create a copy of the SteamCMD-AutoUpdate.ini file and modify it for each dedicated server.</p>
   <p>2. Pass the name of the .INI file to the script:</p>
   <pre>SteamCMD-AutoUpdate.exe myCustomFile.ini</pre>
