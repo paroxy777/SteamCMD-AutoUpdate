@@ -17,19 +17,19 @@
   
   <h2>Requirements</h2>
   <ul>
-    <li>SteamCMD</li>
+    <li><a href="https://developer.valvesoftware.com/wiki/SteamCMD">SteamCMD</a></li>
     <li>A Windows Service for the dedicated server. This can be done easily with <a href="https://nssm.cc/">NSSM</a>, or <a href="https://stackoverflow.com/questions/3582108/create-windows-service-from-executable">manually</a> if you prefer.</li>
   </ul>
   
   <h2>Builds available</h2>
   <ul>
-    <li>CMD batch file (.cmd)</li>
-    <li>AutoIt script (.au3)</li>
+    <li>Windows CMD batch file (.cmd)</li>
+    <li><a href="https://www.autoitscript.com/site/">AutoIt</a> script (.au3)</li>
     <li>Execuable console app (.exe compiled from .au3)</li>
   </ul>
   <h2>Usage</h2>
   <ol>
-    <li>Edit the configuration at the top of the .cmd file -OR- Edit the .ini file for the .au3 or .exe versions.</li>
+    <li>Edit the configuration at the top of the .cmd file <b>-OR-</b> Edit the .ini file for the .au3 or .exe versions.</li>
     <li>Run as Administrator. This is required for the Windows Service stop/start controls.</li>
   </ol>
 </html>
