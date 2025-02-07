@@ -21,7 +21,7 @@ echo - Updating %server_name%...
 :stop_valheim_server_service
 echo - Stop Service: %service_name%
 ::Check if %service_exe% is running and stop it
-call :is_service_running || goto :server_exe_check
+call :is_service_running && goto :server_exe_check
 call :stop_service
 
 :server_exe_check
@@ -38,11 +38,11 @@ rem if %ERRORLEVEL% NEQ 1 goto :error2
 :end
 echo - Starting Service: %service_exe%
 call :start_service
-call :is_service_running || goto :error3
+call :is_exe_running || goto :error3
 echo UPDATE COMPLETED
 goto :eof
 
-REM === ERRORS ========================
+:: === ERRORS ========================
 goto :eof
 :error1
 echo - ERROR1: %steamcmd_exe% is still running! 
@@ -68,14 +68,14 @@ exit /b 2
 echo - ERROR3: %server_exe% did not restart!
 exit /b 3
 
-REM === SUBROUTINES ===================
+:: === SUBROUTINES ===================
 goto :eof
 :force_kill_exe
-rem disable service auto-start parameter
+:: disable service auto-start parameter
 nssm set %service_name% Start SERVICE_DISABLED
 call :stop_service
 call :taskkill
-rem enable service auto-start parameter
+:: enable service auto-start parameter
 nssm set %service_name% Start SERVICE_AUTO_START
 goto :eof
 
@@ -85,14 +85,14 @@ call :timeout 20
 goto :eof
 
 :is_service_running
-rem ERRORLEVELS: 0=Running, 1=NOT running (or other status)
+:: ERRORLEVELS: 0=Running, 1=NOT running (or other status)
 sc.exe queryex "%service_name%"|find "STATE"|find /v "RUNNING" >Nul
 if %ERRORLEVEL% NEQ 0 exit /b 1
 exit /b 0
 goto :eof
 
 :is_exe_running
-rem ERRORLEVELS: 0=Running, 1=NOT running
+:: ERRORLEVELS: 0=Running, 1=NOT running
 tasklist /nh /fi "Imagename eq %server_exe%" | find "%server_exe%" > NUL
 if %ERRORLEVEL% NEQ 0 exit /b 1
 exit /b 0
@@ -105,7 +105,7 @@ goto :eof
 
 :start_service
 nssm start %service_name%
-CALL :timeout 30
+CALL :timeout 20
 goto :eof
 
 :timeout
@@ -116,5 +116,5 @@ ping -n %1 127.0.0.1 > nul
 ping -n 2 127.0.0.1 > nul
 goto :eof
 
-REM === EOF ===========================
+:: === EOF ===========================
 :eof
