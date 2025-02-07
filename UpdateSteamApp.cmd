@@ -39,7 +39,7 @@ rem if %ERRORLEVEL% NEQ 1 goto :error2
 echo - Starting Service: %service_exe%
 call :start_service
 call :is_exe_running || goto :error3
-echo - UPDATE COMPLETED
+echo UPDATE COMPLETED
 goto :eof
 
 :: === ERRORS ========================
@@ -99,12 +99,12 @@ exit /b 0
 goto :eof
 
 :stop_service
-nssm stop %service_name%
+net stop %service_name%
 CALL :timeout 20
 goto :eof
 
 :start_service
-nssm start %service_name%
+net start %service_name%
 CALL :timeout 20
 goto :eof
 
