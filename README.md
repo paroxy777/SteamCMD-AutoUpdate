@@ -24,7 +24,7 @@
   <ul>
     <li>Windows CMD batch file (.cmd)</li>
     <li><a href="https://www.autoitscript.com/site/">AutoIt</a> script (.au3)</li>
-    <li>Execuable console app (.exe compiled from .au3)</li>
+    <li>Execuable console app (.exe compiled from the .au3 source)</li>
   </ul>
   <h2>Installation</h2>
   <p>Files required for each version:</p>
