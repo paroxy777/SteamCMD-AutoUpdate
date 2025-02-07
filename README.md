@@ -52,4 +52,6 @@
   <p>1. Create a copy of the SteamCMD-AutoUpdate.ini file and modify it for each dedicated server.</p>
   <p>2. Pass the name of the .INI file to the script:</p>
   <pre>SteamCMD-AutoUpdate.exe myCustomFile.ini</pre>
+  <p>Plan B:</p>
+  <p>Make copies of the the required files into separate directories and modify each SteamCMD-AutoUpdate.ini file.</p>
 </html>
