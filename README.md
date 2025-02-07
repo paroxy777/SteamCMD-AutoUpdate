@@ -27,15 +27,29 @@
     <li><a href="https://www.autoitscript.com/site/">AutoIt</a> script (.au3)</li>
     <li>Execuable console app (.exe compiled from .au3)</li>
   </ul>
-  <h2>Installtion</h2>
+  <h2>Installation</h2>
   <p>Files required for each version:</p>
   <ul>
     <li>.CMD version: SteamCMD-AutoUpdate.cmd</li>
     <li>.AU3 version: SteamCMD-AutoUpdate.au3 & SteamCMD-AutoUpdate.ini</li>
     <li>.EXE version: SteamCMD-AutoUpdate.exe & SteamCMD-AutoUpdate.ini</li>
+  </ul>
   <h2>Usage</h2>
+  <h3>CMD Version:</h3>
   <ol>
-    <li>Edit the configuration at the top of the .cmd file <b>-OR-</b> Edit the .ini file for the .au3 or .exe versions.</li>
+    <li>Edit the User Configuration area at the top of the .cmd file.</li>
     <li>Run as Administrator. This is required for the Windows Service stop/start controls.</li>
   </ol>
+  <h3>.AU3 or .EXE Version:</h3>
+  <ol>
+    <li>Edit the .INI to match your server's configuration.</li>
+    <li>Run as Administrator. This is required for the Windows Service stop/start controls.</li>
+  </ol>
+  <h2>Managing multiple dedicated servers</h2>
+  <h3>CMD version:</h3>
+  <p>Make multiple copies the SteamCMD-AutoUpdate.cmd and modify the User Configuration section in each file.</p>
+  <h3>AU3 or EXE version:</h3>
+  <p>Create a copy of the SteamCMD-AutoUpdate.ini file and modify it for each dedicated server.</p>
+  <p>Pass the name of the .INI file to the script:</p>
+  <pre>SteamCMD-AutoUpdate.exe myCustomFile.ini</pre>
 </html>
