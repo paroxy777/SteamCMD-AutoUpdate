@@ -36,8 +36,8 @@ Exit
 
 ; ERRORS ==============================
 Func error1()
-	ConsoleWrite("- ERROR1-FATAL: " & $server_name & " is still running!"
-	ConsoleWrite("- Check the Windows Service and/or close " & $server_exe manually & " and try again."
+	ConsoleWrite("- ERROR1-FATAL: " & $server_name & " is still running!" )
+	ConsoleWrite("- Check the Windows Service and/or close " & $server_exe manually & " and try again." )
 	Exit(1)
 EndFunc   ;==>error1
 
