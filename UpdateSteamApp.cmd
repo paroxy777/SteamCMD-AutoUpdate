@@ -39,7 +39,7 @@ rem if %ERRORLEVEL% NEQ 1 goto :error2
 echo - Starting Service: %service_exe%
 call :start_service
 call :is_exe_running || goto :error3
-echo UPDATE COMPLETED
+echo - UPDATE COMPLETED
 goto :eof
 
 :: === ERRORS ========================
