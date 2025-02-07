@@ -54,7 +54,7 @@ EndFunc   ;==>error3
 
 ; FUNCTIONS ===========================
 Func run_cmd_wait(ByRef $commandName)
-	RunWait('"' & @ComSpec & '" /k ' & $commandName, @SystemDir)
+	RunWait('"' & @ComSpec & '" /c ' & $commandName, @SystemDir)
 EndFunc   ;==>run_cmd_wait
 
 Func is_exe_running()
