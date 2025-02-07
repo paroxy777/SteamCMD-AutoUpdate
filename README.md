@@ -30,9 +30,9 @@
   <h2>Installation</h2>
   <p>Files required for each version:</p>
   <ul>
-    <li>.CMD version: SteamCMD-AutoUpdate.cmd</li>
-    <li>.AU3 version: SteamCMD-AutoUpdate.au3 & SteamCMD-AutoUpdate.ini</li>
-    <li>.EXE version: SteamCMD-AutoUpdate.exe & SteamCMD-AutoUpdate.ini</li>
+    <li><b>.CMD version:</b> SteamCMD-AutoUpdate.cmd</li>
+    <li><b>.AU3 version:</b> SteamCMD-AutoUpdate.au3 & SteamCMD-AutoUpdate.ini</li>
+    <li><b>.EXE version:</b> SteamCMD-AutoUpdate.exe & SteamCMD-AutoUpdate.ini</li>
   </ul>
   <h2>Usage</h2>
   <h3>CMD Version:</h3>
