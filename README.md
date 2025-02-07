@@ -2,8 +2,7 @@
   <h1>SteamCMD-AutoUpdate</h1>
   <p><b>Easy Steam dedicated game server updates & local installtion repair.</b></p>
   
-  <p>This project is to a simple way to upgrade any dedicatied game server that was installed via Steam or SteamCMD.<br>
-    SteamCMD will verify your local installtion files and install any recent updates.
+  <p>This project is to a simple way to upgrade any dedicatied game server that was installed via Steam or SteamCMD. SteamCMD will verify your local installtion files and install any recent updates.
   <p>This is all highly experimental. There are no destructive functions, but use at your own risk.</p>
   
   <h2>Theroy of operation</h2>
