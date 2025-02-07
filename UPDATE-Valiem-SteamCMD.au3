@@ -13,43 +13,43 @@ static global $working_dir = "C:\Users\Admin\Desktop\Valhiem Service Manager"
 
 ;START
 if $steam_user == "" Then $steam_user == "anonymous"
-ConsoleWrite("- Updating " & $server_name & " ...")
+ConsoleWrite("- Updating " & $server_name & " ..." & @CRLF)
 
 ;STOP SERVER SERVICE
-ConsoleWrite("- Stop Service: " & $service_name & ".")
+ConsoleWrite("- Stop Service: " & $service_name & "." & @CRLF)
 if is_exe_running() Then stop_service()
 
 ;VERIFY SERVER HAS STOPPED
 if is_exe_running() Then error1()
 
 ;UPDATE SERVER
-ConsoleWrite("- Updating " & $server_name )
+ConsoleWrite("- Updating " & $server_name & @CRLF)
 local $commandName = ""& $steamcmd_dir & "\" & $steamcmd_exe & " +force_install_dir " & $server_dir & " +login " & $steam_user &" "& $steam_pw & " +app_update " & $app_id & " -beta public validate +quit"
 run_cmd_wait($commandName)
 
 ;END
-ConsoleWrite(" - Starting Service: %service_exe% ")
+ConsoleWrite("- Starting Service: "& $server_exe & "." & @CRLF)
 start_service()
 if NOT is_exe_running() Then error3()
-ConsoleWrite("- UPDATE COMPLETED")
+ConsoleWrite("- UPDATE COMPLETED" & @CRLF)
 Exit
 
 ; ERRORS ==============================
 Func error1()
-	ConsoleWrite("- ERROR1-FATAL: " & $server_name & " is still running!" )
-	ConsoleWrite("- Check the Windows Service and/or close " & $server_exe manually & " and try again." )
+	ConsoleWriteError("- ERROR1-FATAL: " & $server_name & " is still running!" )
+	ConsoleWriteError("- Check the Windows Service and/or close " & $server_exe manually & " and try again." )
 	Exit(1)
 EndFunc   ;==>error1
 
 ;Func error2()
-;	ConsoleWrite ( "- ERROR2-WARN: An unknown "& $steamcmd_exe &" error occured."
-;	ConsoleWrite ( "- "& $server_name &" may not have updated properly, check the logs."
-;	ConsoleWrite ( "- We did not automatically restart "& $server_exe &" ."
+;	ConsoleWriteError ( "- ERROR2-WARN: An unknown "& $steamcmd_exe &" error occured." & @CRLF)
+;	ConsoleWriteError ( "- "& $server_name &" may not have updated properly, check the logs." & @CRLF)
+;	ConsoleWriteError ( "- We did not automatically restart "& $server_exe &" ." & @CRLF)
 ;	Exit(2)
 ;EndFunc
 
 Func error3()
-	ConsoleWrite("- ERROR3: " & $server_exe & " did not restart!")
+	ConsoleWriteError("- ERROR3: " & $server_exe & " did not restart!" & @CRLF)
 EndFunc   ;==>error3
 
 ; FUNCTIONS ===========================
