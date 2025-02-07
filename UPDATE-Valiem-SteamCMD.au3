@@ -1,7 +1,7 @@
 ; USERCONFIG: MODIFY THESE SETTINGS ===
 static global $service_name = "valhiemDedicatedServerAutoStart"
 static global $server_name = "Valheim Dedicated Server"
-static global $server_dir = "C:\Program Files(x86) \Steam\steamapps\common\Valheim dedicated server"
+static global $server_dir = "C:\Program Files(x86)\Steam\steamapps\common\Valheim dedicated server"
 static global $server_exe = "valheim_server.exe"
 static global $app_id = 896660
 static global $steamcmd_dir = "C:\SteamCMD"
