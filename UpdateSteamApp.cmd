@@ -8,11 +8,12 @@ set app_id=896660
 set steamcmd_dir=C:\SteamCMD
 set steamcmd_exe=steamcmd.exe
 set steam_user=
+set working_dir="C:\Users\Admin\Desktop\Valhiem Service Manager"
 :: /USERCONFIG ========================
 
 :start
 if [%steam_user%]==[] set steam_user=anonymous
-cd "C:\Users\Admin\Desktop\Valhiem Service Manager"
+cd %working_dir%
 cls
 title Update %server_name%
 echo - Updating %server_name%...
