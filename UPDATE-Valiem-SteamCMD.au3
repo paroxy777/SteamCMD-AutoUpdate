@@ -27,20 +27,19 @@ ConsoleWrite("=================================================" &@CRLF)
 ; Verify user specifed data
 verify_user_config()
 
-; STOP SERVER SERVICE
-ConsoleWrite("- Stop Service: " &$service_id &"." &@CRLF)
+; 1. STOP SERVER SERVICE
+ConsoleWrite("- 1. Stopping Service: " &$service_id &"." &@CRLF)
 if is_exe_running() Then stop_service()
-
 ; VERIFY SERVER HAS STOPPED
 if is_exe_running() Then error1()
 
-; UPDATE SERVER
-ConsoleWrite("- Updating " &$server_name &@CRLF)
+; 2. UPDATE SERVER
+ConsoleWrite("- 2. Updating " &$server_name &@CRLF)
 local $commandName = "" &$steamcmd_dir &"\" &$steamcmd_exe &" +force_install_dir "&$server_dir &"+login " &$steam_user &" " &$steam_pw &" +app_update " &$app_id &" -beta public validate +quit"
 run_cmd_wait($commandName)
 
-; RESTART SERVICE
-ConsoleWrite("- Starting Service: "&$server_exe &"." &@CRLF)
+; 3. RESTART SERVICE
+ConsoleWrite("- 3. Starting Service: "&$server_exe &"." &@CRLF)
 start_service()
 if NOT is_exe_running() Then error3()
 
@@ -65,6 +64,11 @@ EndFunc   ;==>error1
 Func error3()
 	ConsoleWriteError("- ERROR3: " &$server_exe &" did not restart!" &@CRLF)
 EndFunc   ;==>error3
+
+Func error_end($err_msg)
+	ConsoleWriteError($err_msg)
+	Exit(9)
+EndFunc
 
 
 ; === CUSTOM FUNCTIONS ===========================
@@ -100,29 +104,6 @@ Func set_ini_path()
 	return($ini_value)
 EndFunc
 
-Func verify_user_config()
-	; Find missing values
-	isempty_ini_value($service_id,"service_id")
-	isempty_ini_value($server_name,"server_name")
-	isempty_ini_value($server_dir,"server_dir")
-	isempty_ini_value($server_exe,"server_exe")
-	isempty_ini_value($app_id,"app_id")
-	isempty_ini_value($steamcmd_dir,"steamcmd_dir")
-	isempty_ini_value($steamcmd_exe,"steamcmd_exe")
-	if $steam_user == "" Then $steam_user = "anonymous"
-	ConsoleWrite("- NOTE: using Anonymous for Steam username" &@CRLF)
-	;Empty password allowed for anonymous, else fail
-	if $steam_pw == "" AND $steam_user <> "anonymous" Then isempty_ini_value($steam_pw,"steam_pw")
-	isempty_ini_value($working_dir,"working_dir")
-EndFunc
-
-Func isempty_ini_value($iniValue, $label)
-	; Checks for missing values from INI file and exits
-	if $iniValue == "" Then 
-		error_end("ERROR -> INI CONFIG!" &@CRLF &"->" &$label &" = not specified" &@CRLF &"-->INI: " &$iniFilePath)
-	EndIf
-EndFunc
-
 Func set_steam_pw($ini_value)
 	; Remove Steam password if Steam user is anonymous
 	if $steam_user == "anonymous" Then $ini_value = ""
@@ -155,7 +136,25 @@ Func str_get_filename($full_path)
 	Return $return
 EndFunc
 
-Func error_end($err_msg)
-	ConsoleWriteError($err_msg)
-	Exit
+Func verify_user_config()
+	; Find missing values
+	isempty_ini_value($service_id,"service_id")
+	isempty_ini_value($server_name,"server_name")
+	isempty_ini_value($server_dir,"server_dir")
+	isempty_ini_value($server_exe,"server_exe")
+	isempty_ini_value($app_id,"app_id")
+	isempty_ini_value($steamcmd_dir,"steamcmd_dir")
+	isempty_ini_value($steamcmd_exe,"steamcmd_exe")
+	if $steam_user == "" Then $steam_user = "anonymous"
+	ConsoleWrite("- NOTE: using Anonymous for Steam username" &@CRLF)
+	;Empty password allowed for anonymous, else fail
+	if $steam_pw == "" AND $steam_user <> "anonymous" Then isempty_ini_value($steam_pw,"steam_pw")
+	isempty_ini_value($working_dir,"working_dir")
+EndFunc
+
+Func isempty_ini_value($iniValue, $label)
+	; Checks for missing values from INI file and exits
+	if $iniValue == "" Then 
+		error_end("ERROR9-FATAL: INI CONFIG" &@CRLF &"->" &$label &" = not specified" &@CRLF &"-->INI: " &$iniFilePath)
+	EndIf
 EndFunc
