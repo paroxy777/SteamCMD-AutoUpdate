@@ -1,34 +1,35 @@
-; LOAD DATA FROM .INI FILE ==============
+;=LOAD USER CONFIG
 local $ini_value = ""
 static global $iniFilePath = set_ini_path()
 ; Set gloabl configuration variables
 static global $working_dir = IniRead($iniFilePath, "SERVER", "working_dir", "")
 static global $service_id = IniRead($iniFilePath, "SERVER", "service_id", "")
-static global $server_name = IniRead($iniFilePath, "SERVER", "server_name", "Default Server")
-; <server_dir: Split filename from full path specified in INI file
+static global $server_name = set_server_name()
+; == server_dir: Split filename from full path specified in INI file
 $ini_value = IniRead($iniFilePath, "SERVER", "server_dir", "")
 if NOT FileExists($ini_value) Then error_end("- ERROR9-FATAL: server_dir not found." &@CRLF &"-> server_dir = " &$ini_value &@CRLF)
 static global $server_dir = str_get_path($ini_value)
 static global $server_exe = str_get_filename($ini_value)
-; />
+; ==
 static global $app_id = IniRead($iniFilePath, "SERVER", "app_id", "")
-; <steam_cmd: Split filename from full path specified in INI file
-$ini_value = IniRead($iniFilePath, "SERVER", "steamcmd_dir", "")                       
+; == steam_cmd: Split filename from full path specified in INI file
+$ini_value = IniRead($iniFilePath, "SERVER", "steamcmd_dir", "")                   
 if NOT FileExists($ini_value) Then error_end("- ERROR9-FATAL: steamcmd_dir not found." &@CRLF &"-> steamcmd_dir = " &$ini_value &@CRLF)
 static global $steamcmd_dir = str_get_path($ini_value)
 static global $steamcmd_exe = str_get_filename($ini_value)
-; />/
+; ==
 static global $steam_user = IniRead($iniFilePath, "SERVER", "steam_user", "anonymous")
 static global $steam_pw = set_steam_pw(IniRead($iniFilePath, "SERVER", "steam_pw", ""))
+;=
 
-
+;=MAIN
 ; Write console header
 ConsoleWrite("==== Steam_CMD AUTO UPDATER =====================" &@CRLF)
 ConsoleWrite("  Updating -" &$server_name &"- via SteamCMD ..." &@CRLF)
 ConsoleWrite("=================================================" &@CRLF)
 
 ; Verify user specifed data
-verify_user_config()
+verify_user_config(0)
 
 ; 1. STOP SERVER SERVICE
 ConsoleWrite("- 1. Stopping Service: " &$service_id &"." &@CRLF)
@@ -46,24 +47,28 @@ ConsoleWrite("- 3. Starting Service: "&$server_exe &"." &@CRLF)
 start_service()
 if NOT is_exe_running() Then error3()
 
-; Write console footer
+; Write console footer and Exit
 ConsoleWrite("==== UPDATE COMPLETED ===========================" & @CRLF)
 Exit
+;==
 
 
 ; === MAIN FUNCTIONS ===========================
 Func run_cmd_wait(ByRef $commandName)
-	; Run CMD console command and wait until it finishes
+	;Run CMD console command and wait until it finishes
+	;---
 	RunWait('"' &@ComSpec &'" /c ' &$commandName, @SystemDir)
 EndFunc   ;==>run_cmd_wait
 
 Func is_exe_running()
 	;Returns PID if EXE is running. Returns 0 if not running.
+	;---
 	return (ProcessExists($server_exe))
 EndFunc
 
 Func stop_service()
 	;Send STOP singal Windows Service
+	;---
 	local $commandName = "net stop " &$service_id & ""
 	run_cmd_wait($commandName)
 	Sleep(20000)
@@ -71,15 +76,54 @@ EndFunc   ;==>stop_service
 
 Func start_service()
 	;Send START singal Windows Service
+	;---
 	local $commandName = "net start " &$service_id &""
 	run_cmd_wait($commandName)
 	Sleep(20000)
 EndFunc   ;==>start_service
 
+Func verify_user_config($show_config)
+	;Verifies configuration data. show_config=1 -> Print config.
+	;---
+	; Find missing values in user config
+	isempty_ini_value($service_id,"service_id")
+	isempty_ini_value($server_name,"server_name")
+	isempty_ini_value($server_dir,"server_dir")
+	isempty_ini_value($server_exe,"server_exe")
+	isempty_ini_value($app_id,"app_id")
+	isempty_ini_value($steamcmd_dir,"steamcmd_dir")
+	isempty_ini_value($steamcmd_exe,"steamcmd_exe")
+	; Set default Steam username is not specified
+	if $steam_user == "" Then $steam_user = "anonymous"
+	ConsoleWrite("- NOTE: Steam username = Anonymous" &@CRLF)
+	; Allow empty password for anonymous, else fail
+	if $steam_pw == "" AND $steam_user <> "anonymous" Then isempty_ini_value($steam_pw,"steam_pw")
+	isempty_ini_value($working_dir,"working_dir")
+	ConsoleWrite("- User Configuration => Passed Verification" &@CRLF)
+	; DEBUG: Print configuration
+	if $show_config = 1 Then
+		ConsoleWrite("service_id = " &$service_id &@CRLF)
+		ConsoleWrite("server_name = " &$server_name &@CRLF)
+		ConsoleWrite("server_dir = " &$server_dir &@CRLF)
+		ConsoleWrite("server_exe = " &$server_exe &@CRLF)
+		ConsoleWrite("app_id = " &$app_id &@CRLF)
+		ConsoleWrite("steamcmd_dir = " &$steamcmd_dir &@CRLF)
+		ConsoleWrite("steamcmd_exe = " &$steamcmd_exe &@CRLF)
+		ConsoleWrite("steam_user = " &$steam_user &@CRLF)
+		local $ini_value = ""
+		$ini_value = $steam_pw
+		if $steam_user == "anonymous" then $ini_value = ""
+		ConsoleWrite("steam_pw = " &$steam_pw &@CRLF)
+		ConsoleWrite("working_dir = " &$working_dir &@CRLF)
+	EndIf
+EndFunc
+
+
 
 ; === INI FUNCTIONS =========================
 Func set_ini_path()
 	; Get full path to INI from parameter1, or use the default
+	;---
 	local $ini_value = ""
 	if $CmdLine[0] > 0 Then	$ini_value = $CmdLine[1] ; User specified INI file
 	local $ini_value = "SteamCMD-AutoUpdate.ini"  ; Default ini file name
@@ -87,15 +131,25 @@ Func set_ini_path()
 	return($ini_value)
 EndFunc
 
+Func set_server_name()
+	; Set default server name
+	;---
+	$ini_value = IniRead($iniFilePath, "SERVER", "server_name", "Default Server")
+	if $ini_value == "" Then $ini_value = "Default Server"
+	Return($ini_value)
+EndFunc
+
 Func set_steam_pw($ini_value)
 	; Remove Steam password if Steam user is anonymous
+	;---
 	if $steam_user == "anonymous" Then $ini_value = ""
-	Return $steam_pw = $ini_value
+	Return $ini_value
 EndFunc
 
 Func str_get_path($full_path)
 	;Returns folder path from a full path. Eg: C:\folder\filename.txt ==> C:\folder\
-	;local $full_path = "C:\Program Files\Test Folder\filename.ini"
+	;---
+	;debug: local $full_path = "C:\Program Files\Test Folder\filename.ini"
 	local $split_array = StringSplit($full_path, "\")
 	local $return = ""
 	local $i = 1
@@ -113,42 +167,29 @@ EndFunc
 
 Func str_get_filename($full_path)
 	;Returns filename from a full path. Eg: C:\folder\filename.txt ==> filename.txt
+	;---
 	local $split_array = StringSplit($full_path, "\")
 	local $return = $split_array[$split_array[0]]
 	Return $return
 EndFunc
 
-Func verify_user_config()
-	; Find missing values in user config
-	isempty_ini_value($service_id,"service_id")
-	isempty_ini_value($server_name,"server_name")
-	isempty_ini_value($server_dir,"server_dir")
-	isempty_ini_value($server_exe,"server_exe")
-	isempty_ini_value($app_id,"app_id")
-	isempty_ini_value($steamcmd_dir,"steamcmd_dir")
-	isempty_ini_value($steamcmd_exe,"steamcmd_exe")
-	; Set default Steam username is not specified
-	if $steam_user == "" Then $steam_user = "anonymous"
-	ConsoleWrite("- NOTICE: Steam username = Anonymous" &@CRLF)
-	; Empty password allowed for anonymous, else fail
-	if $steam_pw == "" AND $steam_user <> "anonymous" Then isempty_ini_value($steam_pw,"steam_pw")
-	isempty_ini_value($working_dir,"working_dir")
-EndFunc
-
 Func isempty_ini_value($iniValue, $label)
 	; Checks for missing values from INI file and exits
+	;---
 	if $iniValue == "" Then 
 		error_end("ERROR9-FATAL: INI CONFIG" &@CRLF &"->" &$label &" = not specified" &@CRLF &"-->INI: " &$iniFilePath)
 	EndIf
 EndFunc
 
 
+
 ; === ERROR HANDLE FUNCTIONS ==============================
-; EXIT ERROR LEVELS
+;EXIT ERROR LEVELS:
 ; 1 = Service failed to stop
 ; 2 = SteamCMD errorlevel
 ; 3 = Service failed to start
 ; 9 = Misc errors
+;---
 
 Func error1()
 	ConsoleWriteError("- ERROR1-FATAL: " &$server_name &" is still running!"  &@CRLF)
